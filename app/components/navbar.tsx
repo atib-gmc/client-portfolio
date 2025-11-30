@@ -4,7 +4,7 @@ import Link from "next/link";
 import styles from "./navbar.module.css";
 import { usePathname } from "next/navigation";
 
-export default function Navbar(): JSX.Element {
+export default function Navbar() {
     const pathname = usePathname() || "/";
 
     const linkClass = (href: string) =>
