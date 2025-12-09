@@ -11,12 +11,12 @@ const articles = [
     // ... add more articles
 ];
 
-const ArticleCard = ({ article }) => {
+const ArticleCard = ({ article }: { article: { id: number; title: string; category: string; bgColor: string; isTall: boolean } }) => {
     // Use a dynamic height class based on the 'isTall' property
     const heightClass = article.isTall ? 'h-96 md:h-[450px]' : 'h-72 md:h-96';
 
     return (
-        <Link href={`/work/${article.id}`}>
+        <Link href={`/content`}>
             <div
                 className={`relative flex items-end p-6 transition-transform duration-300 ease-in-out transform hover:scale-[1.02] ${heightClass} ${article.bgColor} text-white`}
             >

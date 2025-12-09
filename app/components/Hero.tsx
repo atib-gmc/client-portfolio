@@ -14,7 +14,7 @@ export default function Slider() {
                 Autoplay({ delay: 2000, stopOnMouseEnter: true, stopOnInteraction: false })  // autoplay tiap 3 detik
 
             ]}
-            className="w-full cursor-pointer mx-auto"
+            className="w-full cursor-pointer mx-auto py-10"
         >
             <CarouselContent className="w-full mx-auto">
                 <CarouselItem>

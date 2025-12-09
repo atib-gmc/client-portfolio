@@ -173,7 +173,7 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
 
 function CarouselPrevious({
   className,
-  variant = "outline",
+  // variant = "",
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -182,12 +182,12 @@ function CarouselPrevious({
   return (
     <Button
       data-slot="carousel-previous"
-      variant={variant}
+      // variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
+        "absolute size-8 cursor-pointer hover:bg-transparent",
         orientation === "horizontal"
-          ? "top-1/2 -left-12 -translate-y-1/2"
+          ? "top-1/2 -left-12 -translate-y-1/2 h-full w-2/4 bg-transparent "
           : "-top-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
@@ -195,7 +195,7 @@ function CarouselPrevious({
       onClick={scrollPrev}
       {...props}
     >
-      <ArrowLeft />
+      {/* <ArrowLeft /> */}
       <span className="sr-only">Previous slide</span>
     </Button>
   )
@@ -203,7 +203,7 @@ function CarouselPrevious({
 
 function CarouselNext({
   className,
-  variant = "outline",
+  // variant = "",
   size = "icon",
   ...props
 }: React.ComponentProps<typeof Button>) {
@@ -212,12 +212,12 @@ function CarouselNext({
   return (
     <Button
       data-slot="carousel-next"
-      variant={variant}
+      // variant={variant}
       size={size}
       className={cn(
-        "absolute size-8 rounded-full",
+        "absolute size-8 cursor-pointer hover:bg-transparent",
         orientation === "horizontal"
-          ? "top-1/2 -right-12 -translate-y-1/2"
+          ? "top-1/2 -right-12 -translate-y-1/2 h-full w-2/4 bg-transparent "
           : "-bottom-12 left-1/2 -translate-x-1/2 rotate-90",
         className
       )}
@@ -225,7 +225,7 @@ function CarouselNext({
       onClick={scrollNext}
       {...props}
     >
-      <ArrowRight />
+      {/* <ArrowRight /> */}
       <span className="sr-only">Next slide</span>
     </Button>
   )
