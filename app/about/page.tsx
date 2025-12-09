@@ -40,11 +40,6 @@ export default function AboutPage() {
                 />
             </section>
 
-            {/* Footer */}
-            <footer className="w-full border-t border-white/20 py-10 flex flex-col items-center gap-3 text-sm opacity-70">
-                <p>© 2025 — Crafted with clarity and calm.</p>
-                <p>Design that whispers, not screams.</p>
-            </footer>
         </main>
     );
 }

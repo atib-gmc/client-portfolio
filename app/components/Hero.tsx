@@ -1,7 +1,7 @@
 "use client"
 
 import Autoplay from "embla-carousel-autoplay"
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel"
 import Image from "next/image"
 
 export default function Slider() {
@@ -35,6 +35,10 @@ export default function Slider() {
                     </div>
                 </CarouselItem>
             </CarouselContent>
+
+            <CarouselPrevious />
+            <CarouselNext />
+
         </Carousel>
     )
 }
