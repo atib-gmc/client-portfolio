@@ -182,7 +182,7 @@ function CarouselPrevious({
   return (
     <Button
       data-slot="carousel-previous"
-      // variant={variant}
+      // variant={variant}zx
       size={size}
       className={cn(
         "absolute size-8 cursor-pointer hover:bg-transparent",
