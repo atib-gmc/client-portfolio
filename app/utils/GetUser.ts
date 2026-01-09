@@ -7,7 +7,6 @@ import { User } from "@supabase/auth-js/dist/module/lib/types";
 export default function GetUser(): User | null {
     const [user, setUser] = useState<User | null>(null);
 
-    console.log("fired")
     useEffect(() => {
         // Get initial user
         const getInitialUser = async () => {

@@ -8,20 +8,18 @@ export default function Home() {
 
   return (<div className="flex min-h-screen px-12 items-center justify-center  font-sans ">
     <main className="min-h-screen flex w-full mt-10  flex-col items-center justify-between py-10  sm:items-start">
-
       <div className="hero bg-white mb-10 ">
         <Image src="/intro-light.gif" alt="Intro GIF" width={700} height={380} className="mx-auto md:scale-150 xl:scale-200 pt-8.54 45 zx pb-20" />
         <div className="intos flex gap-4  mt-8 flex-wrap relative">
           <div className="row flex-1">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
-
               whileInView={{
                 opacity: 1, y: 0,
                 transition: { duration: 0.8, ease: "easeOut", delay: 0.3, }
               }}
               viewport={{ once: true }}
-              className="xl:text-3xl md-text-2xl max-w-3/4 mb-10 text-white text-start   "> "I design with a quiet kind of passion —
+              className="xl:text-2xl md-text-2xl max-w-3/4 mb-10 text-black text-start   "> "I design with a quiet kind of passion —
               the kind you can’t always see, but can feel in the details. I believe a good design doesn’t shout; it resonates. Through shapes, spacing, and subtle contrast, I try to create work that carries a
               sense of balance, clarity, and just enough emotion to leave a trace."</motion.p>
             <motion.div
@@ -38,7 +36,6 @@ export default function Home() {
           <motion.div
             // 1. Framer Motion handles the initial state (opacity: 0, y: 20)
             initial={{ opacity: 0, y: 20 }}
-
             whileInView={{
               // 2. Framer Motion handles the final state (opacity: 1, y: 0)
               opacity: 1,

@@ -26,7 +26,6 @@ export default function Navbar() {
             }
             setLastScrollY(currentScrollY);
         };
-
         window.addEventListener("scroll", handleScroll, { passive: true });
         return () => window.removeEventListener("scroll", handleScroll);
     }, [lastScrollY]);
@@ -42,33 +41,33 @@ export default function Navbar() {
     // KUNCI: Gunakan mix-blend-difference dan text-white murni
     const linkClass = (href: string) => `
         px-3 py-2 text-sm font-medium uppercase transition-all duration-200
-        mix-blend-difference text-black
+        mix-blend-difference text-black 
         ${pathname === href ? "border-b-2 border-black" : `${style.link}`}
     `;
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-50 transition-transform duration-300
+            className={`fixed top-0 left-0 w-full z-50 transition-transform bg-transparent duration-300
                 ${hidden ? "-translate-y-full" : "translate-y-0"}
                 bg-transparent
             `}
             style={{ isolation: 'auto' }} // Memastikan tidak ada isolasi layer
         >
-            <nav className="mx-auto flex max-w-6xl items-center justify-between p-4 bg-transparent">
+            <nav className="mx-auto flex max-w-6xl items-center bg-white justify-between ">
 
                 {/* Logo juga ikut invert agar terlihat saat bg putih */}
-                <Link href="/" className="mix-blend-difference">
+                <Link href="/" className="">
                     <Image
                         src="/logo.png"
                         alt="logo"
                         width={180}
                         height={80}
                         priority
-                        className="invert-0 hover:skew-3 transition-all duration-200"
+                        className="invert-0 hover:skew-3 transition-all duration-200 z-10"
                     />
                 </Link>
 
-                <ul className="flex items-center gap-6 bg-transparent">
+                <ul className="flex items-center gap-6 z-10">
                     <li >
                         <Link href="/" className={`${linkClass("/")} `}>
                             Home

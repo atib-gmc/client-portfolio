@@ -3,22 +3,33 @@ import { useDropzone } from 'react-dropzone'
 
 export default function MyDropzone({
     setImages,
+    maxFiles = 5,
+    multiple = true
 }: {
-    setImages: React.Dispatch<React.SetStateAction<File[]>>
+    setImages: React.Dispatch<React.SetStateAction<File[]>>,
+    maxFiles?: number,
+    multiple?: boolean
 }) {
     const onDrop = useCallback((acceptedFiles: File[]) => {
         const imageFiles = acceptedFiles.filter(file =>
             file.type.startsWith('image/')
         )
+        if (!multiple) {
+            setImages(imageFiles[0])
+            return
+        } else {
 
-        setImages(prev => [...prev, ...imageFiles])
+            setImages(prev => [...prev, ...imageFiles])
+        }
     }, [setImages])
 
     const { getRootProps, getInputProps, isDragActive } = useDropzone({
         onDrop,
         accept: {
             'image/*': []
-        }
+        },
+        maxFiles,
+        multiple
     })
 
     return (

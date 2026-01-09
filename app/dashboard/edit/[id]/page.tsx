@@ -13,7 +13,7 @@ import client from "@/lib/supabaseClient";
 import Loader from "@/app/components/Loader";
 import { renameImages } from "@/app/utils/func";
 
-export default function CreatePostPage() {
+export default function EditPage() {
     const router = useRouter();
     const [hero, setHero] = useState(null);
     const [isPending, setIspending] = useState(false);
@@ -121,7 +121,7 @@ export default function CreatePostPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 pt-20">
             <header className="fixed top-0 left-0 w-full bg-white border-b z-50">
                 <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-4">
                     <h1 className="text-xl font-semibold">Create Post</h1>
@@ -129,7 +129,7 @@ export default function CreatePostPage() {
                 </div>
             </header>
 
-            <main className="pt-28 mx-auto max-w-3xl px-6 pb-20">
+            <main className=" mx-auto max-w-3xl px-6 pb-20">
                 <Card>
                     <CardHeader>
                         <CardTitle>New Post</CardTitle>

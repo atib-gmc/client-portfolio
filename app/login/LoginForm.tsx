@@ -39,7 +39,7 @@ export default function LoginForm() {
             router.push("/");
         }
     }
-    if (user) redirect("/");
+    // if (user) redirect("/");
     return (
         <form onSubmit={handleSubmit} className="space-y-4">
             <div>
