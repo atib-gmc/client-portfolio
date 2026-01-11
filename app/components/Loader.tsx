@@ -2,7 +2,7 @@ import React from 'react'
 
 export default function Loader({ children }: { children: React.ReactNode }) {
     return (
-        <div className=" h-screen w-screen fixed top-0 right-0  bg-white/30  z-10 flex items-center   justify-center mx-auto ">
+        <div className=" h-screen w-screen fixed top-0 right-0  bg-white/30  z-10 flex items-center backdrop-blur-md    justify-center mx-auto ">
             <div className="text-center">
                 <div className="inline-flex items-center justify-center w-16 h-16 bg-slate-900 rounded-full mb-4 animate-spin">
                     <svg

@@ -1,6 +1,8 @@
 // components/ArticleGrid.js
-
+"use client";
+import { getAllPosts } from '@/lib/actions';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 // Dummy data for the cards
 const articles = [
@@ -11,23 +13,25 @@ const articles = [
     // ... add more articles
 ];
 
-const ArticleCard = ({ article }: { article: { id: number; title: string; category: string; bgColor: string; isTall: boolean } }) => {
+const ArticleCard = (post: any) => {
     // Use a dynamic height class based on the 'isTall' property
-    const heightClass = article.isTall ? 'h-96 md:h-[450px]' : 'h-72 md:h-96';
+    const heightClass = post.isTall ? 'h-96 md:h-[450px]' : 'h-72 md:h-96';
+    console.log(post)
 
     return (
-        <Link href={`/content`}>
+        <Link href={`/content/${post?.article.id}`} key={post?.article.id} className={`rounded-lg overflow-hidden shadow-lg    `}>
             <div
-                className={`relative flex items-end p-6 transition-transform duration-300 ease-in-out transform hover:scale-[1.02] ${heightClass} ${article.bgColor} text-white`}
+                style={{ background: `url(${post?.article.hero?.url})` }}
+                className={`relative flex items-end p-6 transition-transform duration-300 ease-in-out transform hover:scale-[1.02] ${heightClass}  text-white`}
             >
                 {/* The Whoosh logo would be an Image component here */}
-                <h2 className="text-4xl font-serif italic absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                    {article.title}
+                <h2 className="text-3xl self-start font-serif italic absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                    {post?.article.title}
                 </h2>
 
                 {/* Category/Footer text */}
                 <p className="text-base">
-                    {article.category}
+                    {/* {article.category} */}
                 </p>
             </div>
         </Link>
@@ -35,11 +39,22 @@ const ArticleCard = ({ article }: { article: { id: number; title: string; catego
 };
 
 const ArticleGrid = () => {
+
+    const [post, setPost] = useState<any>(null)
+    useEffect(() => {
+        async function fetchData() {
+            const res = await getAllPosts()
+            if (res.data) {
+                setPost(res.data)
+            }
+        } fetchData();
+        // Any side effects if needed
+    }, [])
     return (
         <div className="container mx-auto p-4">
             {/* 2-column grid on small screens, which collapses to 1 column on extra small screens if needed */}
             <div className="grid grid-cols-1 sm:grid-cols-2  gap-4">
-                {articles.map((article) => (
+                {post?.map((article: any) => (
                     <ArticleCard key={article.id} article={article} />
                 ))}
             </div>

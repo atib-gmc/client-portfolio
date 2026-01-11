@@ -3,7 +3,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import GetUser from "../utils/GetUser";
 import Link from "next/link";
 import { getPosts } from "@/lib/db";
 import { useEffect, useState } from "react";
@@ -12,11 +11,11 @@ import Modal from "@/app/components/Modal";
 export default function DashboardPage() {
     const [refresh, setRefresh] = useState(false)
     // const user = GetUser()
-    const [posts, setPosts] = useState<null | []>(null)
+    const [posts, setPosts] = useState<any>(null)
     const router = useRouter()
     useEffect(() => {
         async function fetchPosts() {
-            const data = await getPosts();
+            const data: any = await getPosts();
             console.log(data)
             setPosts(data);
         }
@@ -71,7 +70,7 @@ export default function DashboardPage() {
                         <CardContent className="space-y-4 text-sm">
                             {posts?.data?.map((post: any) => (
                                 <div key={post.id} className="p-4 border space-x-2 border-gray-200 rounded-lg hover:shadow-md transition">
-                                    <h3 className="text-lg font-semibold mb-2">{post.title}</h3>
+                                    <Link href={`/content/${post.id}`}><h3 className="text-lg font-semibold mb-2">{post.title}</h3></Link>
                                     <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit/${post.id}`)}>Edit Post</Button>
                                     <Modal setRefresh={setRefresh} post={post} />
 

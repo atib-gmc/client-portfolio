@@ -1,4 +1,4 @@
-export function renameImages(image: File[], prefix: string) {
+export function renameImages(image: any, prefix: string) {
     const newName = new File(
         [image],
         (prefix) + Date.now().toString() + "." + image.name.split('.').pop(),

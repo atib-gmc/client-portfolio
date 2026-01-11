@@ -6,12 +6,12 @@ export default function MyDropzone({
     maxFiles = 5,
     multiple = true
 }: {
-    setImages: React.Dispatch<React.SetStateAction<File[]>>,
+    setImages: any
     maxFiles?: number,
     multiple?: boolean
 }) {
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        const imageFiles = acceptedFiles.filter(file =>
+    const onDrop = useCallback((acceptedFiles: any) => {
+        const imageFiles = acceptedFiles.filter((file: any) =>
             file.type.startsWith('image/')
         )
         if (!multiple) {
@@ -19,7 +19,7 @@ export default function MyDropzone({
             return
         } else {
 
-            setImages(prev => [...prev, ...imageFiles])
+            setImages((prev: any) => [...prev, ...imageFiles])
         }
     }, [setImages])
 

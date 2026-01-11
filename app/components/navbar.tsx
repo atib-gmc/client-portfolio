@@ -1,75 +1,101 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
-import style from "./navbar.module.css"
-import IsAuthenticated from "./IsAuthenticated";
+import style from "./navbar.module.css";
 import GetUser from "../utils/GetUser";
 import { Button } from "@/components/ui/button";
 import client from "@/lib/supabaseClient";
 
 export default function Navbar() {
     const pathname = usePathname() || "/";
-    const [hidden, setHidden] = useState(false);
-    const [lastScrollY, setLastScrollY] = useState(0);
     const user = GetUser();
 
+    // pages that allow transparent navbar at top
+    const transparentPages = ["/content", "/about"];
+
+    const isTransparentPage = transparentPages.some(
+        (page) => pathname === page || pathname.startsWith(page + "/")
+    );
+
+    const [hidden, setHidden] = useState(false);
+    const [isOnTop, setIsOnTop] = useState(true);
+    const lastScrollY = useRef(0);
+
+    /* =====================
+       Scroll position logic
+    ====================== */
     useEffect(() => {
-        const handleScroll = () => {
-            const currentScrollY = window.scrollY;
-            if (currentScrollY > lastScrollY && currentScrollY > 50) {
+        const onScroll = () => {
+            const currentY = window.scrollY;
+            setIsOnTop(currentY === 0);
+
+            if (currentY > lastScrollY.current && currentY > 50) {
                 setHidden(true);
             } else {
                 setHidden(false);
             }
-            setLastScrollY(currentScrollY);
+
+            lastScrollY.current = currentY;
         };
-        window.addEventListener("scroll", handleScroll, { passive: true });
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, [lastScrollY]);
+
+        window.addEventListener("scroll", onScroll, { passive: true });
+
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
+
+    /* =====================
+       Reset on route change
+    ====================== */
+    useEffect(() => {
+        setHidden(false);
+        setIsOnTop(true);
+        lastScrollY.current = 0;
+    }, [pathname]);
 
     function signout() {
-        // Sign out logic here
         client.auth.signOut().then(() => {
-            // Handle post-signout actions
-            window.location.href = "/login"; // Redirect to login page
+            window.location.href = "/login";
         });
     }
 
-    // KUNCI: Gunakan mix-blend-difference dan text-white murni
+    /* =====================
+       Style logic
+    ====================== */
+    const useTransparent = isTransparentPage && isOnTop;
+
     const linkClass = (href: string) => `
-        px-3 py-2 text-sm font-medium uppercase transition-all duration-200
-        mix-blend-difference text-black 
-        ${pathname === href ? "border-b-2 border-black" : `${style.link}`}
-    `;
+    px-3 py-2 text-sm font-medium uppercase transition-colors duration-200
+    ${useTransparent ? "text-white" : "text-black"}
+    ${pathname === href ? "border-b-2 border-current" : style.link}
+  `;
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-50 transition-transform bg-transparent duration-300
-                ${hidden ? "-translate-y-full" : "translate-y-0"}
-                bg-transparent
-            `}
-            style={{ isolation: 'auto' }} // Memastikan tidak ada isolasi layer
+            className={`
+        fixed top-0 w-full z-50 transition-all duration-300
+        ${hidden ? "-translate-y-full" : "translate-y-0"}
+        ${useTransparent ? "bg-transparent" : "bg-white"}
+      `}
         >
-            <nav className="mx-auto flex max-w-6xl items-center bg-white justify-between ">
-
-                {/* Logo juga ikut invert agar terlihat saat bg putih */}
-                <Link href="/" className="">
+            <nav className="mx-auto flex px-10 py-4 items-center justify-between">
+                {/* Logo */}
+                <Link href="/">
                     <Image
                         src="/logo.png"
                         alt="logo"
-                        width={180}
-                        height={80}
+                        width={150}
+                        height={60}
                         priority
-                        className="invert-0 hover:skew-3 transition-all duration-200 z-10"
+                        className={useTransparent ? "invert" : ""}
                     />
                 </Link>
 
-                <ul className="flex items-center gap-6 z-10">
-                    <li >
-                        <Link href="/" className={`${linkClass("/")} `}>
+                <ul className="flex items-center gap-6">
+                    <li>
+                        <Link href="/" className={linkClass("/")}>
                             Home
                         </Link>
                     </li>
@@ -84,18 +110,28 @@ export default function Navbar() {
                         </Link>
                     </li>
 
-                    {user && (<><li>
-                        <Link href="/dashboard" className={linkClass("/dashboard")}>
-                            Dashboard
-                        </Link>
-
-                    </li>
-                        <li>
-                            <Button onClick={() => signout()} className="px-3 text-white py-2 text-sm font-medium uppercase mix-blend-difference cursor-pointer hover:-translate-y-1 transition-all duration-200">
-                                Logout
-                            </Button>
-                        </li>
-                    </>
+                    {user && (
+                        <>
+                            <li>
+                                <Link href="/dashboard" className={linkClass("/dashboard")}>
+                                    Dashboard
+                                </Link>
+                            </li>
+                            <li>
+                                <Button
+                                    onClick={signout}
+                                    className={`
+                    border px-3 py-2 text-sm uppercase
+                    ${useTransparent
+                                            ? "border-white text-white"
+                                            : "border-black text-black"}
+                    bg-transparent hover:bg-transparent
+                  `}
+                                >
+                                    Logout
+                                </Button>
+                            </li>
+                        </>
                     )}
                 </ul>
             </nav>

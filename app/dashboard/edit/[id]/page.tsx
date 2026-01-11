@@ -5,36 +5,76 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MyDropzone from "@/app/components/DropZone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import RichTextEditor from "@/app/components/RichText";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import client from "@/lib/supabaseClient";
 import Loader from "@/app/components/Loader";
 import { renameImages } from "@/app/utils/func";
+import { getSinglePost } from "@/lib/actions";
 
 export default function EditPage() {
+    // const [post, setPost] = useState<any>(null)
     const router = useRouter();
-    const [hero, setHero] = useState(null);
+    const { id } = useParams()
+    const [hero, setHero] = useState<any>(null);
     const [isPending, setIspending] = useState(false);
     const [status, setStatus] = useState("");
-    const [images, setImages] = useState([]);
+    const [images, setImages] = useState<any>([]);
     const [title, setTitle] = useState("");
     const [markdown, setMarkdown] = useState("");
     const [error, setError] = useState("");
+    const [deleteImages, setDeleteImages] = useState<string[]>([]);
 
-    function deleteImage(index: number) {
-        setImages((prevImages) => prevImages.filter((_, i) => i !== index));
+    useEffect(() => {
+        async function getData() {
+            setIspending(true);
+            try {
+                const dataPost = await getSinglePost(id);
+                if (dataPost?.data) {
+                    const p = dataPost.data;
+                    // setPost(p);aing make imagefix hostingan gambarna, free storage 10gb  
+
+                    // ISI STATE INPUT DISINI
+                    setTitle(p.title || "");
+                    setMarkdown(p.content || "");
+                    setHero(p.hero)
+                    setImages(p.images_urls);
+                    // Catatan: Hero dan Images biasanya butuh logic khusus 
+                    // karena state kamu mengharapkan File object dari Dropzone
+                }
+            } catch (err) {
+                console.error("Error fetch:", err);
+            } finally {
+                setIspending(false);
+            }
+        }
+
+        if (id) getData();
+    }, [id]); // Tambahkan id sebagai dependency agar aman
+    function deleteImage(image: any) {
+        if (image.url) {
+            setDeleteImages(pre => [...pre, image.fileId]);
+        }
+
+        setImages((prevImages: any) => prevImages.filter((img: any) => img !== image));
     }
 
+    console.log(deleteImages)
     const uploadSemuaGambar = async () => {
-        let heroUrl = null
+        let heroUrl = hero.url ? hero : null;
         const daftarUrlHasil = [];
         console.log("uplaod image")
+        console.log("hero url", heroUrl)
+        console.log("hero ", hero)
 
-        // 1. Upload HERO jika ada
-        if (hero) {
-            setStatus("Uploading hero image...");
+
+        // 1. Upload HERO jika ada dan jika hero imagenya file baru
+        console.log("hero baru ?", (hero && Boolean(hero.name)))
+        if (hero && Boolean(hero.name)) {
+            console.log("hero gambar baru")
+            setStatus("Updating hero image...");
             const heroRenamed = renameImages(hero, "hero_");
             const authHero = await fetch("/api/auth-imagekit").then(res => res.json());
 
@@ -58,25 +98,32 @@ export default function EditPage() {
         if (images.length > 0) {
             setStatus(`Uploading ${images.length} images...`);
             for (const file of images) {
-                const imageRenamed = renameImages(file, "post_");
-                const auth = await fetch("/api/auth-imagekit").then(res => res.json());
+                if (!file.url) {
+                    // Hanya upload file baru (File object)
+                    const imageRenamed = renameImages(file, "post_");
 
-                const formData = new FormData();
-                formData.append("file", imageRenamed);
-                formData.append("fileName", imageRenamed.name);
-                formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!);
-                formData.append("signature", auth.signature);
-                formData.append("expire", auth.expire.toString());
-                formData.append("token", auth.token);
+                    const auth = await fetch("/api/auth-imagekit").then(res => res.json());
 
-                const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
-                    method: "POST",
-                    body: formData,
-                });
+                    const formData = new FormData();
+                    formData.append("file", imageRenamed);
+                    formData.append("fileName", imageRenamed.name);
+                    formData.append("publicKey", process.env.NEXT_PUBLIC_IMAGEKIT_PUBLIC_KEY!);
+                    formData.append("signature", auth.signature);
+                    formData.append("expire", auth.expire.toString());
+                    formData.append("token", auth.token);
 
-                const data = await response.json();
-                daftarUrlHasil.push({ url: data.url, fileId: data.fileId });
-                console.log("Uploaded gallery image:", data.url);
+                    const response = await fetch("https://upload.imagekit.io/api/v1/files/upload", {
+                        method: "POST",
+                        body: formData,
+                    });
+
+                    const data = await response.json();
+                    daftarUrlHasil.push({ url: data.url, fileId: data.fileId });
+                    console.log("Uploaded gallery image:", data.url);
+                } else {
+                    // Jika sudah ada URL, langsung masukkan
+                    daftarUrlHasil.push(file);
+                }
             }
         }
 
@@ -85,7 +132,7 @@ export default function EditPage() {
 
     async function uploadPost() {
         setError("");
-        if (title.trim() === "" || markdown.trim() === "" || (!hero && images.length === 0)) {
+        if (title.trim() === "" || markdown.trim() === "" || (!hero && images.length === 0) || !hero) {
             setError("Please fill all fields and add at least one image.");
             return;
         }
@@ -98,18 +145,23 @@ export default function EditPage() {
             const { galleryUrls, heroUrl } = await uploadSemuaGambar();
 
             // Simpan ke Supabase
-            setStatus("Saving post to database...");
-            const { error: supabaseError } = await client.from("posts").insert({
+            setStatus("updating post to database...");
+            const { error: supabaseError } = await client.from("posts").update({
                 title,
                 content: markdown,
                 slug: title.toLowerCase().replace(/\s+/g, '-'),
                 images_urls: galleryUrls, // Ini menyimpan array [{url, fileId}, ...]
                 hero: heroUrl
-            });
+            }).eq("id", id);
+            //hapus deletedImages to imagekit
 
             if (supabaseError) throw supabaseError;
+            if (deleteImages.length > 0) {
+                setStatus("Deleting removed images...");
+                deleteImage(deleteImages);
+            }
 
-            alert("Post created successfully!");
+            alert("Post Updated successfully!");
             router.push("/dashboard");
         } catch (err) {
             console.error(err);
@@ -121,9 +173,9 @@ export default function EditPage() {
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="min-h-screen bg-gray-50 pt-26">
             <header className="fixed top-0 left-0 w-full bg-white border-b z-50">
-                <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-4">
+                <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-6">
                     <h1 className="text-xl font-semibold">Create Post</h1>
                     <Button onClick={() => router.push("/dashboard")} variant="outline">Back</Button>
                 </div>
@@ -139,10 +191,14 @@ export default function EditPage() {
                         {/* Hero Image */}
                         <div className="space-y-2">
                             <Label className="font-semibold">Hero Image</Label>
-                            <div className="relative w-full h-64 border rounded-md overflow-hidden bg-gray-100">
+                            <div className="relative w-full h-48 border rounded-md overflow-hidden bg-gray-100">
                                 {hero ? (
                                     <Image
-                                        src={URL.createObjectURL(hero)}
+                                        src={
+                                            (hero.name)
+                                                ? URL.createObjectURL(hero)
+                                                : hero.url
+                                        }
                                         alt="Hero Preview"
                                         fill
                                         className="object-cover cursor-pointer"
@@ -165,14 +221,16 @@ export default function EditPage() {
                             <Label>Gallery Images</Label>
                             <MyDropzone setImages={setImages} />
                             <div className="flex gap-2 flex-wrap mt-2">
-                                {images.map((file, index) => (
-                                    <div key={index} className="relative w-20 h-20 border rounded-md overflow-hidden">
+                                {images.map((file: any, i: any) => (
+                                    <div key={i} className="relative  h-20 w-20 border rounded-md overflow-hidden">
+                                        {/* {console.log("Rendering image:", file)} */}
+                                        {/* <pre>{JSON.stringify(typeof file)}, {i}</pre> */}
                                         <Image
-                                            src={URL.createObjectURL(file)}
+                                            src={file.url ? file.url : URL.createObjectURL(file)}
                                             alt="preview"
                                             fill
                                             className="object-cover cursor-pointer"
-                                            onClick={() => deleteImage(index)}
+                                            onClick={() => deleteImage(file)}
                                             unoptimized
                                         />
                                     </div>
@@ -194,7 +252,7 @@ export default function EditPage() {
                                 Cancel
                             </Button>
                             <Button disabled={isPending} onClick={uploadPost}>
-                                {isPending ? "Processing..." : "Publish Post"}
+                                {isPending ? "Processing..." : "Update Post"}
                             </Button>
                         </div>
 

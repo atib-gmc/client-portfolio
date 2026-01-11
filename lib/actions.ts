@@ -68,8 +68,11 @@ export async function deletePost(post: any) {
     }
 }
 
+export async function getAllPosts() {
+    return await client.from("posts").select("*").order("created_at", { ascending: false });
+}
 
-export async function deleteImage(fileId: string[] | string) {
+export async function deleteImage(fileId: any[] | string) {
     try {
         // Kasus 1: Jika input adalah Array
         if (Array.isArray(fileId)) {

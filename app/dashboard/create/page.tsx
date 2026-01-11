@@ -123,7 +123,7 @@ export default function CreatePostPage() {
     return (
         <div className="min-h-screen bg-gray-50">
             <header className="fixed top-0 left-0 w-full bg-white border-b z-50">
-                <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-4">
+                <div className="mx-auto max-w-7xl flex items-center justify-between px-6 py-6">
                     <h1 className="text-xl font-semibold">Create Post</h1>
                     <Button onClick={() => router.push("/dashboard")} variant="outline">Back</Button>
                 </div>
@@ -139,7 +139,7 @@ export default function CreatePostPage() {
                         {/* Hero Image */}
                         <div className="space-y-2">
                             <Label className="font-semibold">Hero Image</Label>
-                            <div className="relative w-full h-64 border rounded-md overflow-hidden bg-gray-100">
+                            <div className="relative w-full h-48 border rounded-md overflow-hidden bg-gray-100">
                                 {hero ? (
                                     <Image
                                         src={URL.createObjectURL(hero)}

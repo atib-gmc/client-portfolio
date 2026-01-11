@@ -16,7 +16,7 @@ import { deletePost } from "@/lib/actions";
 import client from "@/lib/supabaseClient"; // Import client kamu
 import { useRouter } from "next/navigation";
 
-export default function Modal({ post, setRefresh }) {
+export default function Modal({ post, setRefresh }: { post: any, setRefresh: any }) {
     const router = useRouter();
 
     // const handleDelete = async () => {
