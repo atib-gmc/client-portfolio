@@ -12,13 +12,21 @@ import { useParams, useRouter } from "next/navigation";
 import client from "@/lib/supabaseClient";
 import Loader from "@/app/components/Loader";
 import { renameImages } from "@/app/utils/func";
-import { getSinglePost } from "@/lib/actions";
+import { getAllCategory, getSinglePost } from "@/lib/actions";
+import CategorySelect from "../../create/select";
+import TagsInput from "../../create/inputTag";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function EditPage() {
     // const [post, setPost] = useState<any>(null)
     const router = useRouter();
     const { id } = useParams()
-    const [date, setDate] = useState<any>()
+    const [date, setDate] = useState<any>("")
+    const [scope, setScope] = useState("")
+    const [credit, setCredit] = useState("")
+    const [tags, setTags] = useState([])
+    const [category, setCategory] = useState<any>([])
+    const [selectedCategory, setSelectedCategory] = useState("")
     const [hero, setHero] = useState<any>(null);
     const [isPending, setIspending] = useState(false);
     const [status, setStatus] = useState("");
@@ -32,16 +40,24 @@ export default function EditPage() {
         async function getData() {
             setIspending(true);
             try {
+                const { data: categories } = await getAllCategory()
+                setCategory(categories)
                 const dataPost = await getSinglePost(id);
                 if (dataPost?.data) {
                     const p = dataPost.data;
                     // setPost(p);aing make imagefix hostingan gambarna, free storage 10gb  
 
                     // ISI STATE INPUT DISINI
-                    setTitle(p.title || "");
-                    setMarkdown(p.content || "");
-                    setHero(p.hero)
-                    setImages(p.images_urls);
+                    setTitle(p?.title || "");
+                    setMarkdown(p?.content || "");
+                    setHero(p?.hero)
+                    setImages(p?.images_urls);
+                    setDate(p?.date || "");
+                    setScope(p?.scope_of_work || "");
+                    setCredit(p?.credit || "");
+                    setTags(p?.tags || []);
+                    setSelectedCategory(p?.category_id || "");
+
                     // Catatan: Hero dan Images biasanya butuh logic khusus 
                     // karena state kamu mengharapkan File object dari Dropzone
                 }
@@ -153,7 +169,12 @@ export default function EditPage() {
                 content: markdown,
                 slug: title.toLowerCase().replace(/\s+/g, '-'),
                 images_urls: galleryUrls, // Ini menyimpan array [{url, fileId}, ...]
-                hero: heroUrl
+                hero: heroUrl,
+                category_id: selectedCategory,
+                tags: tags,
+                date,
+                scope_of_work: scope,
+                credit
             }).eq("id", id);
             //hapus deletedImages to imagekit
 
@@ -244,6 +265,38 @@ export default function EditPage() {
                         <div className="space-y-2">
                             <Label>Content</Label>
                             <RichTextEditor value={markdown} onchange={setMarkdown} />
+                        </div>
+
+                        {/* date */}
+                        <div className="space-y-2">
+                            <Label htmlFor="date">Date</Label>
+                            <Input id="date" value={date} onChange={e => setDate(e.target.value)} type="date" placeholder="Enter post title" />
+                        </div>
+
+                        {/* scope of work */}
+                        <div className="space-y-2">
+                            <Label htmlFor="scope">Scope Of Work</Label>
+                            <input value={scope} onChange={e => setScope(e.target.value)} id="scope" placeholder="" className="input rounded-sm ring-gray-300 ring-1  w-full  p-2" />
+                        </div>
+
+                        {/* category */}
+                        <div className="space-y-2">
+                            {/* <Label htmlFor="title">Category</Label> */}
+                            {/* <Input type="date" placeholder="Enter post title" /> */}
+                            <CategorySelect selectedCategory={selectedCategory} setSelectCategory={setSelectedCategory} categories={category} />
+                        </div>
+
+                        {/* tags */}
+                        <div className="space-y-2">
+                            <Label htmlFor="tags">Tags</Label>
+                            {/* <Input type="date" placeholder="Enter post title" /> */}
+                            <TagsInput id="tags" tags={tags} setTags={setTags} />
+                        </div>
+
+                        {/* credit */}
+                        <div className="space-y-2">
+                            <Label htmlFor="scope">credit</Label>
+                            <Textarea value={credit} onChange={e => setCredit(e.target.value)} id="scope" placeholder="" className="bg-input  w-full min-h-24 p-2" />
                         </div>
 
                         {isPending && <Loader>{status}</Loader>}

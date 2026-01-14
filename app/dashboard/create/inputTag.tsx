@@ -1,6 +1,6 @@
 import React, { useState, KeyboardEvent, ChangeEvent, Dispatch } from 'react';
 
-const TagsInput = ({ setTags, tags }: { setTags: Dispatch<any>, tags: string[] }) => {
+const TagsInput = ({ id, setTags, tags }: { id: string, setTags: Dispatch<any>, tags: string[] }) => {
     const [inputValue, setInputValue] = useState("");
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -66,6 +66,7 @@ const TagsInput = ({ setTags, tags }: { setTags: Dispatch<any>, tags: string[] }
 
                 {/* Input teks */}
                 <input
+                    id={id}
                     type="text"
                     value={inputValue}
                     onChange={handleInputChange}

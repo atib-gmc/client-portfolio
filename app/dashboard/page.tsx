@@ -71,7 +71,7 @@ export default function DashboardPage() {
                             {posts?.data?.map((post: any) => (
                                 <div key={post.id} className="p-4 border space-x-2 border-gray-200 rounded-lg hover:shadow-md transition">
                                     <Link href={`/content/${post.id}`}><h3 className="text-lg font-semibold mb-2">{post.title}</h3></Link>
-                                    <Button variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit/${post.id}`)}>Edit Post</Button>
+                                    <Button className="cursor-pointer" variant="outline" size="sm" onClick={() => router.push(`/dashboard/edit/${post.id}`)}>Edit Post</Button>
                                     <Modal setRefresh={setRefresh} post={post} />
 
                                     {/* <Button variant="outline" size="sm" className="h-7 bg-black text-white" >Delete</Button> */}

@@ -4,15 +4,15 @@ import Image from 'next/image';
 import styles from './content.module.css'
 
 // URL Gambar yang telah dicari di internet
-const ILLUSTRATION_URL = "http://googleusercontent.com/image_collection/image_retrieval/9698723849907971949_0";
-const APPSTORE_LOGO_URL = "http://googleusercontent.com/image_collection/image_retrieval/12381743144748118721_0";
-const PLAYSTORE_LOGO_URL = "http://googleusercontent.com/image_collection/image_retrieval/12381743144748118721_1";
+// const ILLUSTRATION_URL = "http://googleusercontent.com/image_collection/image_retrieval/9698723849907971949_0";
+// const APPSTORE_LOGO_URL = "http://googleusercontent.com/image_collection/image_retrieval/12381743144748118721_0";
+// const PLAYSTORE_LOGO_URL = "http://googleusercontent.com/image_collection/image_retrieval/12381743144748118721_1";
 
 
 const BillboardHero = async ({ params }: { params: { id: string } }) => {
     const { id } = await params
     const { data } = await getSinglePost(id)
-    console.log(data?.hero?.url)
+    console.log(data)
     return (
         // Wrapper Hero: Menggunakan Flexbox. Asumsi background (pagar, jalan) adalah background div induk atau elemen di luar komponen ini.
         <div className="w-full ">
@@ -44,26 +44,25 @@ const BillboardHero = async ({ params }: { params: { id: string } }) => {
 
             {/* 1. KONTEN KIRI: Teks Utama dan Deskripsi (Area Gelap) */}
             {/* Menggunakan fixed width max-w-[450px] agar mirip dengan porsi di gambar */}
-            <main className='flex'>
+            <main className='flex lg:flex-row flex-col'>
 
                 <div className="row  grid grid-cols-2 items-center w-full gap-2  md:flex-3 p-8">
                     <div className=" h-20  w-full">
-                        <p className='text-3xl font-semibold'>Year</p>
-                        <p className="text-gray-500 text-2xl">2021</p>
+                        <p className='lg:text-3xl text-2xl font-semibold'>Year</p>
+                        <p className="text-gray-500 lg:text-2xl text-xl">{data?.date.split('-')[0]}</p>
                     </div>
 
                     <div className=" h-20  w-full">
-                        <p className='text-3xl font-semibold'>Scope Of Work</p>
-                        <p className="text-gray-500 text-2xl">Design And Branding</p>
+                        <p className='lg:text-3xl text-2xl font-semibold'>Scope Of Work</p>
+                        <p className="text-gray-500 lg:text-2xl text-xl">{data?.scope_of_work}</p>
                     </div>
                     <div className=" h-20  w-full">
-                        <p className='text-3xl font-semibold'>Category</p>
-                        <p className="text-gray-500 text-2xl">Furniture</p>
+                        <p className='lg:text-3xl text-2xl font-semibold'>Category</p>
+                        <p className="text-gray-500 lg:text-2xl text-xl">{data?.categories?.name}</p>
                     </div>
                     <div className=" h-20  w-full">
-                        <p className='text-3xl font-semibold'>Credit</p>
-                        <p className="text-gray-500 text-2xl">GD: Teguh Budiman</p>
-                        <p className="text-gray-500 text-2xl">PM: Angelia Megakristi</p>
+                        <p className='lg:text-3xl text-2xl font-semibold'>Credit</p>
+                        <p className='text-gray-500 lg:text-2xl text-xl' dangerouslySetInnerHTML={{ __html: data?.credit.replace(/\n/g, '<br />') }}></p>
                     </div>
 
                 </div>

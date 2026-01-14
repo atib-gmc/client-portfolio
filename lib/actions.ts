@@ -105,5 +105,5 @@ export async function deleteImage(fileId: any[] | string) {
 
 
 export async function getSinglePost(id: any) {
-    return await client.from("posts").select("*").eq("id", id).single();
+    return await client.from("posts").select("*, categories(name)").eq("id", id).single();
 }

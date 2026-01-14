@@ -95,8 +95,8 @@ export default function Navbar() {
 
                 <ul className="flex items-center gap-6">
                     <li>
-                        <Link href="/" className={linkClass("/")}>
-                            Home
+                        <Link href="/work" className={linkClass("/work")}>
+                            Work
                         </Link>
                     </li>
                     <li>
@@ -104,9 +104,9 @@ export default function Navbar() {
                             About
                         </Link>
                     </li>
-                    <li>
-                        <Link href="/contact" className={linkClass("/contact")}>
-                            Contact
+                    <li className="bg-blue-500 rounded-full py-[2px] whitespace-nowrap text-white">
+                        <Link href="/contact" className={linkClass("/contact") + " cursor-pointer text-white"}>
+                            Start Your Project
                         </Link>
                     </li>
 
