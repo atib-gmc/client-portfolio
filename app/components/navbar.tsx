@@ -67,7 +67,7 @@ export default function Navbar() {
     const useTransparent = isTransparentPage && isOnTop;
 
     const linkClass = (href: string) => `
-    px-3 py-2 text-sm font-medium uppercase transition-colors duration-200
+    px-3 py-2 text-xs md:text-sm font-medium uppercase transition-colors duration-200
     ${useTransparent ? "text-white" : "text-black"}
     ${pathname === href ? "border-b-2 border-current" : style.link}
   `;
@@ -80,11 +80,11 @@ export default function Navbar() {
         ${useTransparent ? "bg-transparent" : "bg-white"}
       `}
         >
-            <nav className="mx-auto flex px-10 py-4 items-center justify-between">
+            <nav className="mx-auto flex md:p-8 p-5 py-4  items-center flex-wrap md:flex-nowrap  md:justify-between">
                 {/* Logo */}
-                <Link href="/">
+                <Link className="hover:skew-3 duration-200 transition-all  md:mx-auto w-full" href="/">
                     <Image
-                        src="/logo.png"
+                        src="/SAM - Logo-01.png"
                         alt="logo"
                         width={150}
                         height={60}

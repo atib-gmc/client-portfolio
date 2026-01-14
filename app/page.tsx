@@ -1,7 +1,6 @@
 "use client";
 import { motion } from "motion/react"
 import Image from "next/image";
-import Slider from "./components/Hero";
 import ArticleGrid from "./components/Projects";
 
 export default function Home() {
@@ -9,9 +8,9 @@ export default function Home() {
   return (<div className="flex min-h-screen px-12 items-center justify-center  font-sans ">
     <main className="min-h-screen flex w-full mt-10  flex-col items-center justify-between py-10  sm:items-start">
       <div className="hero bg-white mb-10 ">
-        <Image src="/intro-light.gif" alt="Intro GIF" width={700} height={380} className="mx-auto md:scale-150 xl:scale-200 pt-8.54 45 zx pb-20" />
-        <div className="intos flex gap-4  mt-8 flex-wrap relative">
-          <div className="row flex-1">
+        <Image src="/intro-light.gif" quality={70} alt="Intro GIF" width={700} height={380} className="mx-auto scale-200 md:scale-150 xl:scale-200 md:pt-8.54 pt-14 45 zx pb-20 min-h-screen " />
+        <div className="intos flex gap-4 md:flex-row flex-col   mt-8 flex-wrap relative">
+          <div className="row flex-2  flex">
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{
@@ -19,10 +18,13 @@ export default function Home() {
                 transition: { duration: 0.8, ease: "easeOut", delay: 0.3, }
               }}
               viewport={{ once: true }}
-              className="xl:text-2xl md-text-2xl max-w-3/4 mb-10 text-black text-start   "> "I design with a quiet kind of passion —
-              the kind you can’t always see, but can feel in the details. I believe a good design doesn’t shout; it resonates. Through shapes, spacing, and subtle contrast, I try to create work that carries a
-              sense of balance, clarity, and just enough emotion to leave a trace."</motion.p>
-            <motion.div
+              className="  mb-10 text-black text-start text-sm ">
+
+              "Inspired by the concept of Samsara, the ever-repeating cycle of rebirth, we see a brand's journey as a dynamic and continuous process. <br /> <br />
+
+              We embrace the Four Stages of Samsara: Birth, Growth, Evolution and Rebirth. Each marking a critical step from entering the market, building presence and refining through insight to emerging stronger than before. In moments of uncertainty, we step in as your adventure companion. We’re there by your side, filling the gaps, sharing the journey, and helping you reach your fullest potential."
+            </motion.p>
+            {/* <motion.div
               initial={{ opacity: 0, x: -100 }}
               whileInView={{
                 opacity: 1, x: 0,
@@ -31,9 +33,21 @@ export default function Home() {
               viewport={{ once: true }}
             >
               <Image src="/typo/p.jpeg" alt="Intro Image" width={400} height={300} className="rounded-xl object-cover w-full max-w-2xl opacity-90" />
-            </motion.div>
+            </motion.div> */}
           </div>
-          <motion.div
+
+          <div className="row border-l-2  border-black flex-1  px-10 ">
+            <h3 className="text-xl font-semibold py-2 text-[#252525]">Our Clients :</h3>
+            <div className="flex  gap-2 md:justify-start md:items-center justify-start items-center ">
+              <div className="socials-links w-14 h-14 rounded-md bg-gray-400"></div>
+              <div className="socials-links w-14 h-14 rounded-md bg-gray-400"></div>
+              <div className="socials-links w-14 h-14 rounded-md bg-gray-400"></div>
+              <div className="socials-links w-14 h-14 rounded-md bg-gray-400"></div>
+
+            </div>
+
+          </div>
+          {/* <motion.div
             // 1. Framer Motion handles the initial state (opacity: 0, y: 20)
             initial={{ opacity: 0, y: 20 }}
             whileInView={{
@@ -70,11 +84,11 @@ export default function Home() {
             viewport={{ once: true }}
           >
             <Image src="/typo/t.jpeg" alt="Intro Image" width={400} height={300} className="rounded-xl  object-cover opacity-90" />
-          </motion.div>
+          </motion.div> */}
 
         </div>
       </div>
-      <Slider />
+      {/* <Slider /> */}
       <ArticleGrid />
     </main>
   </div>

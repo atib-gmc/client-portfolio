@@ -1,4 +1,5 @@
 "use client";
+import { Config } from "jodit/esm/config";
 import dynamic from "next/dynamic";
 import { useRef, useMemo } from "react";
 
@@ -33,6 +34,7 @@ export default function RichTextEditor({ value, onchange }: props) {
                 className="reset"
                 value={value} // This is the initial value
                 config={config}
+
                 // Use onBlur instead of onChange to prevent the cursor jump
                 onBlur={(newContent) => onchange(newContent)}
             // Alternatively, if you MUST use onChange, use a debounce function

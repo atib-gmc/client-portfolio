@@ -5,16 +5,27 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import MyDropzone from "@/app/components/DropZone";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import RichTextEditor from "@/app/components/RichText";
 import { useRouter } from "next/navigation";
 import client from "@/lib/supabaseClient";
 import Loader from "@/app/components/Loader";
 import { renameImages } from "@/app/utils/func";
+import { getAllCategory } from "@/lib/actions";
+import CategorySelect from "./select";
+import TagsInput from "./inputTag";
+import { Textarea } from "@/components/ui/textarea";
+
 
 export default function CreatePostPage() {
     const router = useRouter();
+    const [date, setDate] = useState<any>("")
+    const [scope, setScope] = useState("")
+    const [credit, setCredit] = useState("")
+    const [tags, setTags] = useState([])
+    const [category, setCategory] = useState<any>([])
+    const [selectedCategory, setSelectedCategory] = useState("")
     const [hero, setHero] = useState(null);
     const [isPending, setIspending] = useState(false);
     const [status, setStatus] = useState("");
@@ -26,6 +37,19 @@ export default function CreatePostPage() {
     function deleteImage(index: number) {
         setImages((prevImages) => prevImages.filter((_, i) => i !== index));
     }
+
+    function check() {
+        console.log(date, scope, credit, tags, selectedCategory)
+    }
+
+
+    useEffect(() => {
+        async function getCategories() {
+            const { data } = await getAllCategory()
+            setCategory(data)
+        }
+        getCategories()
+    }, [])
 
     const uploadSemuaGambar = async () => {
         let heroUrl = null
@@ -85,10 +109,20 @@ export default function CreatePostPage() {
 
     async function uploadPost() {
         setError("");
-        if (title.trim() === "" || markdown.trim() === "" || (!hero && images.length === 0)) {
+        if (title.trim() === "" || markdown.trim() === "" || (!hero && images.length === 0) || date.trim() === "" || scope.trim() === "" || selectedCategory.trim() === "" || tags.length === 0 || credit.trim() === "") {
             setError("Please fill all fields and add at least one image.");
             return;
         }
+        // console.log("selectedCategory", selectedCategory)
+        // console.log("tags", tags)
+        // console.log("credit", credit)
+        // console.log("scope", scope)
+        // console.log("date", date)
+        // console.log("title", title)
+        // console.log("markdown", markdown)
+        // console.log("hero", hero)
+        // console.log("images", images)
+        // return
 
         setIspending(true);
         setStatus("Starting upload process...");
@@ -100,6 +134,11 @@ export default function CreatePostPage() {
             // Simpan ke Supabase
             setStatus("Saving post to database...");
             const { error: supabaseError } = await client.from("posts").insert({
+                date,
+                scope_of_work: scope,
+                credit,
+                tags,
+                category_id: selectedCategory,
                 title,
                 content: markdown,
                 slug: title.toLowerCase().replace(/\s+/g, '-'),
@@ -186,6 +225,37 @@ export default function CreatePostPage() {
                             <RichTextEditor value={markdown} onchange={setMarkdown} />
                         </div>
 
+                        {/* date */}
+                        <div className="space-y-2">
+                            <Label htmlFor="date">Date</Label>
+                            <Input id="date" value={date} onChange={e => setDate(e.target.value)} type="date" placeholder="Enter post title" />
+                        </div>
+
+                        {/* scope of work */}
+                        <div className="space-y-2">
+                            <Label htmlFor="scope">Scope Of Work</Label>
+                            <input value={scope} onChange={e => setScope(e.target.value)} id="scope" placeholder="" className="input rounded-sm ring-gray-300 ring-1  w-full  p-2" />
+                        </div>
+
+                        {/* Category */}
+                        <div className="space-y-2">
+                            {/* <Label htmlFor="title">Category</Label> */}
+                            {/* <Input type="date" placeholder="Enter post title" /> */}
+                            <CategorySelect selectedCategory={selectedCategory} setSelectCategory={setSelectedCategory} categories={category} />
+                        </div>
+
+                        {/* tags */}
+                        <div className="space-y-2">
+                            <Label htmlFor="title">Category</Label>
+                            {/* <Input type="date" placeholder="Enter post title" /> */}
+                            <TagsInput tags={tags} setTags={setTags} />
+                        </div>
+
+                        {/* credit */}
+                        <div className="space-y-2">
+                            <Label htmlFor="scope">credit</Label>
+                            <Textarea value={credit} onChange={e => setCredit(e.target.value)} id="scope" placeholder="" className="bg-input  w-full min-h-24 p-2" />
+                        </div>
                         {isPending && <Loader>{status}</Loader>}
                         {error && <p className="text-red-500 text-sm">{error}</p>}
 
@@ -193,7 +263,12 @@ export default function CreatePostPage() {
                             <Button disabled={isPending} variant="outline" onClick={() => router.push("/dashboard")}>
                                 Cancel
                             </Button>
-                            <Button disabled={isPending} onClick={uploadPost}>
+                            <Button className="cursor-pointer" disabled={isPending}
+                                onClick={uploadPost}
+
+                            // onClick={uploadPost}
+
+                            >
                                 {isPending ? "Processing..." : "Publish Post"}
                             </Button>
                         </div>

@@ -18,6 +18,7 @@ export default function EditPage() {
     // const [post, setPost] = useState<any>(null)
     const router = useRouter();
     const { id } = useParams()
+    const [date, setDate] = useState<any>()
     const [hero, setHero] = useState<any>(null);
     const [isPending, setIspending] = useState(false);
     const [status, setStatus] = useState("");
@@ -53,6 +54,7 @@ export default function EditPage() {
 
         if (id) getData();
     }, [id]); // Tambahkan id sebagai dependency agar aman
+
     function deleteImage(image: any) {
         if (image.url) {
             setDeleteImages(pre => [...pre, image.fileId]);

@@ -67,6 +67,9 @@ export async function deletePost(post: any) {
         };
     }
 }
+export async function getAllCategory() {
+    return await client.from("categories").select("*").order("name", { ascending: false })
+}
 
 export async function getAllPosts() {
     return await client.from("posts").select("*").order("created_at", { ascending: false });

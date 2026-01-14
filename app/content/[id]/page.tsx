@@ -15,15 +15,17 @@ const BillboardHero = async ({ params }: { params: { id: string } }) => {
     console.log(data?.hero?.url)
     return (
         // Wrapper Hero: Menggunakan Flexbox. Asumsi background (pagar, jalan) adalah background div induk atau elemen di luar komponen ini.
-        <div className="w-full">
+        <div className="w-full ">
             <div style={{
                 background: `url(${data?.hero.url})`,
                 backgroundSize: 'cover',
                 backgroundRepeat: 'no-repeat',
                 backgroundPosition: 'center'
-            }} className="bg-cover bg-no-repeat w-full min-h-screen p-10 pt-20">
-                <div className="text-white max-w-[450px] p-2 md:p-0 mb-10 md:mb-0 md:mr-20">
-                    <h1 className="text-5xl lg:text-5xl font-extrabold leading-tight tracking-tighter mb-8">
+            }} className="bg-cover bg-no-repeat w-full flex min-h-screen p-10 justify-start items-end pt-20">
+                <div className="text-white max-w-3/4  p-2  md:p-0 mb-10 md:mb-0 md:mr-20">
+                    <h3 className='text-2xl font-semibold'>Client:</h3>
+                    <h1 className="md:text-7xl text-5xl  font-semibold leading-tight tracking-tighter mb-8">
+
                         {data?.title}
                     </h1>
 
@@ -42,8 +44,32 @@ const BillboardHero = async ({ params }: { params: { id: string } }) => {
 
             {/* 1. KONTEN KIRI: Teks Utama dan Deskripsi (Area Gelap) */}
             {/* Menggunakan fixed width max-w-[450px] agar mirip dengan porsi di gambar */}
+            <main className='flex'>
 
-            <article id='reset' className={`${styles.reset} my-10 px-8`} dangerouslySetInnerHTML={{ __html: data?.content }}></article>
+                <div className="row  grid grid-cols-2 items-center w-full gap-2  md:flex-3 p-8">
+                    <div className=" h-20  w-full">
+                        <p className='text-3xl font-semibold'>Year</p>
+                        <p className="text-gray-500 text-2xl">2021</p>
+                    </div>
+
+                    <div className=" h-20  w-full">
+                        <p className='text-3xl font-semibold'>Scope Of Work</p>
+                        <p className="text-gray-500 text-2xl">Design And Branding</p>
+                    </div>
+                    <div className=" h-20  w-full">
+                        <p className='text-3xl font-semibold'>Category</p>
+                        <p className="text-gray-500 text-2xl">Furniture</p>
+                    </div>
+                    <div className=" h-20  w-full">
+                        <p className='text-3xl font-semibold'>Credit</p>
+                        <p className="text-gray-500 text-2xl">GD: Teguh Budiman</p>
+                        <p className="text-gray-500 text-2xl">PM: Angelia Megakristi</p>
+                    </div>
+
+                </div>
+                <article id='reset' className={`${styles.reset} my-10 px-8 flex-4`} dangerouslySetInnerHTML={{ __html: data?.content }}></article>
+
+            </main>
             <div className="images flex flex-col gap-4 overflow-x-auto py-10 px-8">
                 {data?.images_urls && data.images_urls.map((imgObj: any, index: number) => (
                     <div key={index} className="min-w-[300px] min-h-[200px] flex-shrink-0 rounded-lg overflow-hidden border border-gray-300">

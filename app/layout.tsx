@@ -30,7 +30,7 @@ export default function RootLayout({
         style={{ isolation: 'auto' }} // Pastikan body tidak mengisolasi layer
       >
         <Navbar />
-        <main>{children}</main>
+        <main className="">{children}</main>
         <Footer />
       </body>
     </html>

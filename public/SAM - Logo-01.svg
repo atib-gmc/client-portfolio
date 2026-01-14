@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #232428;
+      }
+
+      .cls-3 {
+        letter-spacing: 0em;
+      }
+
+      .cls-2 {
+        font-family: NunitoSans-Bold, 'Nunito Sans';
+        font-size: 88.74px;
+        font-variation-settings: 'wght' 700, 'wdth' 100, 'opsz' 12, 'YTLC' 500;
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <text class="cls-2" transform="translate(476.71 566.49)"><tspan x="0" y="0">Samsa</tspan><tspan class="cls-3" x="274.2" y="0">r</tspan><tspan x="308.54" y="0">a</tspan></text>
+  <g>
+    <g>
+      <path class="cls-1" d="M430.31,441.34v98.64h-36.14c-14.51-8.38-31.33-13.19-49.3-13.19v-36.16c17.06-29.45,48.92-49.29,85.43-49.29Z"/>
+      <path class="cls-1" d="M344.87,553.2v36.08c-17.03,29.53-48.92,49.37-85.46,49.37v-98.67h36.11c14.51,8.41,31.36,13.21,49.35,13.21Z"/>
+    </g>
+    <g>
+      <path class="cls-1" d="M344.87,454.56v36.08c-8.41,14.51-13.21,31.36-13.21,49.35h-36.14c-29.48-17.03-49.32-48.92-49.32-85.43h98.67Z"/>
+      <path class="cls-1" d="M443.52,625.44h-98.64v-36.16c8.38-14.49,13.19-31.33,13.19-49.29h36.11c29.5,17.03,49.35,48.92,49.35,85.46Z"/>
+    </g>
+  </g>
+</svg>
